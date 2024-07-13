@@ -1,4 +1,31 @@
 import {atom, selector} from "recoil";
+import axios from  "axios";
+
+export const networkCount =atom ({
+    key: "networkCount",
+    default: selector({
+        key: "networkCallSelector",
+        get: async () => {
+            const res = await axios.get("https://sum-server.100xdevs.com/notifications")
+            return res.data
+        }
+        // network:34,
+        // job: 45,
+        // message:56,
+        // notification: 67
+    })
+});
+
+
+
+export const total= selector({
+    key: "total",
+    get: ({get}) => {
+        const domains = get(networkCount);
+
+        return domains.network+domains.notifications+domains.messaging+domains.jobs;
+    }
+})
 
 export const networkAtom = atom({
     key: "networkAtom",
